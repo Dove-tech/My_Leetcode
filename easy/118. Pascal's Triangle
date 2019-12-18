@@ -1,0 +1,44 @@
+question:
+Given a non-negative integer numRows, generate the first numRows of Pascal's triangle.
+In Pascal's triangle, each number is the sum of the two numbers directly above it.
+
+Example:
+
+Input: 5
+Output:
+[
+     [1],
+    [1,1],
+   [1,2,1],
+  [1,3,3,1],
+ [1,4,6,4,1]
+]
+
+
+
+
+solution:
+class Solution:
+    def generate(self, numRows: int) -> List[List[int]]:
+        if numRows == 0:
+            return []
+        if numRows == 1:
+            return [[1]]
+        if numRows == 2:
+            return [[1],[1,1]]
+        else:
+            res = [[1],[1,1]]
+            for i in range(1,numRows-1):
+                next_row = []
+                for j in range((len(res[-1])-1)):
+                    next_row.append(res[-1][j]+res[-1][j+1])
+                next_row = [1]+next_row+[1]
+                res.append(next_row)
+        return res
+ 
+  
+ 本题目如果不细心会出现各种各样的问题。
+ 思路是先计算每一行中需要加的元素，在这些元素计算完成后，两边加上相应的1就可以。
+ 首先注意要分类讨论，在不同数值的情况下有不同的方式。
+ 在主要代码中，i是用来确定循环的次数，也就是在添加多少行，j与i无关，是用来每一行加和用的，这里用[-1]可以表达数组的最后一行
+ 注意什么时候用append函数什么时候可以直接用+
