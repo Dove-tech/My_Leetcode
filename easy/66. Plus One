@@ -1,1 +1,26 @@
+Question:
+Given a non-empty array of digits representing a non-negative integer, plus one to the integer.
+The digits are stored such that the most significant digit is at the head of the list, and each element in the array contain a single digit.
+You may assume the integer does not contain any leading zero, except the number 0 itself.
+
+Example 1:
+Input: [1,2,3]
+Output: [1,2,4]
+Explanation: The array represents the integer 123.
+
+
+solution:
+
+class Solution:
+    def plusOne(self, digits: List[int]) -> List[int]:
+        sum = 0
+        for i in digits:
+            sum = sum*10 + i
+        sum += 1
+        return (int(x) for x in str(sum))
+       
+采用的方法是int和str相互转化的方法，先把list中的数变成一个真实的int数字，然后用str函数转化成字符串，再一个一个输出
+
+知识点：
+str函数与int函数,实现字符串和int的相互转化
 
