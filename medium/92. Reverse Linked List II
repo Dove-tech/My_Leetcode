@@ -1,0 +1,78 @@
+question:
+Reverse a linked list from position m to n. Do it in one-pass.
+
+Note: 1 ≤ m ≤ n ≤ length of list.
+
+Example:
+Input: 1->2->3->4->5->NULL, m = 2, n = 4
+Output: 1->4->3->2->5->NULL
+
+
+solution:
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def reverseBetween(self, head: ListNode, m: int, n: int) -> ListNode:
+        """采用先翻转中间部分，之后与不变的前后部分拼接的思路"""
+        # 处理特殊情况
+        if m == n:
+            return head
+        
+        # 例行性的先放一个开始节点，方便操作
+        first = ListNode(0)
+        first.next = head
+        
+        # 通过以下两个节点记录拼接点
+        before_m = first  # 原链表m前的部分
+        after_n = None  # 原链表n后的部分
+        
+        # 通过以下两个节点记录翻转后的链表
+        between_mn_head = None
+        between_mn_end = None
+        
+        index = 0
+        cur_node = first
+        while index < n:
+            index += 1
+            cur_node = cur_node.next
+            if index == m - 1:
+                before_m = cur_node
+            elif index == m:
+                between_mn_end = ListNode(cur_node.val)
+                between_mn_head = between_mn_end
+            elif index > m:
+                temp = between_mn_head
+                between_mn_head = ListNode(cur_node.val)
+                between_mn_head.next = temp
+                if index == n:
+                    after_n = cur_node.next
+        
+        # 进行拼接
+        between_mn_end.next = after_n
+        before_m.next = between_mn_head
+        
+        return first.next
+
+
+本题并没有自己写一写，但是理解了其思路和语句
+
+考虑取出需要反转的这一小段链表，反转完后再插入到原先的链表中。
+
+以本题为例：
+
+变换的是2,3,4这三个点，那么我们可以先取出2，用front指针指向2，然后当取出3的时候，我们把3加到2的前面，把front指针前移到3，依次类推，到4后停止，这样我们得到一个新链表4->3->2, front指针指向4。
+
+对于原链表来说，有两个点的位置很重要，需要用指针记录下来，分别是1和5，把新链表插入的时候需要这两个点的位置。
+
+用pre指针记录1的位置
+
+当4结点被取走后，5的位置需要记下来
+
+这样我们就可以把倒置后的那一小段链表加入到原链表中
+
+cur.next = ... 其意思是针对我当前值，我指定它的下一个值是谁，也就是我指向了谁，你可以理解为cur.next就是cur的下一个node
+
