@@ -23,6 +23,8 @@ class Solution:
 
         _next = head.next
         head.next = self.swapPairs(_next.next)
+        _next.next = head
+        return _next
         
          用递归实现链表相邻互换：
         第一个节点的next是第三、第四个节点交换的结果，第二个节点的next是第一个节点；
