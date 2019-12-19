@@ -1,0 +1,50 @@
+question:
+Given a linked list, swap every two adjacent nodes and return its head.
+
+You may not modify the values in the list's nodes, only nodes itself may be changed.
+
+ 
+
+Example:
+Given 1->2->3->4, you should return the list as 2->1->4->3.
+
+
+solution:
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def swapPairs(self, head: ListNode) -> ListNode:
+        if not head or not head.next:
+            return head
+
+        _next = head.next
+        head.next = self.swapPairs(_next.next)
+        
+         用递归实现链表相邻互换：
+        第一个节点的next是第三、第四个节点交换的结果，第二个节点的next是第一个节点；
+        第三个节点的next是第五、第六个节点交换的结果，第四个节点的next是第三个节点；
+        以此类推
+
+    设置一个dummy 节点简化操作,dummy next 指向head。
+
+    初始化first为第一个节点
+    初始化second为第二个节点
+    初始化current为dummy
+    first.next = second.next
+    second.next = first
+    current.next = second
+    current 移动两格
+    重复
+    
+    
+    还是有一些没有理解，需要后续加强一下
+    
+    https://github.com/azl397985856/leetcode/blob/master/problems/24.swapNodesInPairs.md
+    网站中有图
+
+
+
