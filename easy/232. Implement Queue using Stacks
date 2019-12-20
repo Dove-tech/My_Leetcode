@@ -66,7 +66,12 @@ class MyQueue:
         """
         Returns whether the queue is empty.
         """
-        return not bool(self.stack)
+        if not self.stack:
+            return True
+        else:
+            return False
+        
+        #return not bool(self.stack) 这两种写法都可以
 
 
 
@@ -91,3 +96,20 @@ class MyQueue:
 
 注意，在往stack中添加数字的时候用的是append而不是push
 以及要注意两个堆栈来回push的时候到底数字谁在前面谁在后面
+
+
+
+最后检测empty的错误写法：
+    def empty(self) -> bool:
+        """
+        Returns whether the queue is empty.
+        """
+        if not self.stack:
+            return "true"
+        else:
+            return "false"
+Python中关键字是True和False，所以要直接这么写，但是如果是"ture"或者"false"的话，
+bool("true")==True
+bool("false")==True
+bool("")==False
+所以返回的结果就是有问题的，错误的！
