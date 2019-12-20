@@ -38,7 +38,7 @@ class MinStack:
     def pop(self) -> None:
         if not self.stack:
             return 
-        tmp = self.stack.pop()  #pop是返回去掉最上面值后剩下的栈，而top是返回最上面那个数
+        tmp = self.stack.pop()  #pop是取出最上面那个值并返回那个值，而top是不取出，只返回最上面那个值
         if tmp < 0:
             self.min_stack = self.min_stack - tmp
 
