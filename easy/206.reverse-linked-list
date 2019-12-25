@@ -30,13 +30,12 @@ class Solution:
     注意更新current和pre的位置， 否则有可能出现溢出
     
     
-链表的第一个题目，着实让人不适应。首先要明白单链表是什么样子的，其次要明白我们操作的内容是指针！！而不是数据！！
+链表的第一个题目，着实让人不适应。首先要明白单链表是什么样子的，其次要明白我们操作的内容是指针！！而不是数据！！我们操作的是，谁的下一个是谁，数据本身不改变
 
 prev和cur都是指针，指向了下一个内容，其过程如图所示
 ![image](http://github.com/Dove-tech/my_leetcode/raw/master/Users/Yi Jiang/Desktop/linkedlist1.png<bar>
 
-cur.next并不是指的下一个数字，而是指的指向箭头。
-
+cur.next并不是指的下一个数字，而是箭头，我当前这个cur的下一个到底指向谁
 >>最后返回值返回链表的首个指针就可以了，也就是本题目中的prev
 
 
