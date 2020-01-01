@@ -1,0 +1,67 @@
+question:
+Given a binary array, find the maximum length of a contiguous subarray with equal number of 0 and 1.
+
+Example 1:
+
+Input: [0,1]
+Output: 2
+Explanation: [0, 1] is the longest contiguous subarray with equal number of 0 and 1.
+
+Example 2:
+
+Input: [0,1,0]
+Output: 2
+Explanation: [0, 1] (or [1, 0]) is a longest contiguous subarray with equal number of 0 and 1.
+
+solution:
+class Solution:
+    def findMaxLength(self, nums: List[int]) -> int:
+        min_index = {0:-1}
+        ans = 0
+        sum = 0
+        for i, num in enumerate(nums, 0):
+            if num == 0:
+                sum -= 1
+            else:
+                sum += 1
+            if sum in min_index:
+                ans = max(ans, i - min_index[sum])
+            else:
+                min_index[sum] = i
+        return ans
+
+
+
+
+这个题首先可以考虑用BF，但是这样很容易超时，所以可以考虑用哈希表来做，也就是python中字典的方法
+Use a hashmap to record prefix sum first occurence index. When traversing the array, 
+use current_sum and the hashmap to model all the possible sums of continuous subarray ending at current index.
+
+current_num: If the current traversing num is 0, current_sum decrease by 1; if num is 1, current_sum increases by 1.
+
+hashmap: check if current_num in the hashmap. 
+If so, compare the length i - hashmap[current_sum] with previous length, taking the larger; 
+If not, record the index of the current_sum.
+
+这里首先把0变成-1，然后从头开始记录前N项和sum的值，如果是一个新的sum，就存到hash表中，此时的下标是key。如果不是一个新的sum，那么说明这个sum
+和上一个出现这个sum的位置之间，和是0，也就是0和1的数量相等，这可能就是我们要找的一个subarray，此时比较一下当前的长度和我们已经找到的最长的一个
+长度来确定截止到目前最长的subarray的长度。
+注意，因为一开始sum就是0，所以我们在遍历前要先给0这个sum设置一个key为-1。
+enumerate() 函数用于将一个可遍历的数据对象(如列表、元组或字符串)组合为一个索引序列，同时列出数据和数据下标，一般用在 for 循环当中。
+
+以下是 enumerate() 方法的语法:
+
+enumerate(sequence, [start=0])
+
+参数
+    sequence -- 一个序列、迭代器或其他支持迭代对象。
+    start -- 下标起始位置。
+举例    
+    >>>seasons = ['Spring', 'Summer', 'Fall', 'Winter']
+    >>> list(enumerate(seasons))
+    [(0, 'Spring'), (1, 'Summer'), (2, 'Fall'), (3, 'Winter')]
+    >>> list(enumerate(seasons, start=1))       # 下标从 1 开始
+    [(1, 'Spring'), (2, 'Summer'), (3, 'Fall'), (4, 'Winter')]
+
+用这个函数可以很方便的获得下标
+最后注意一下下标起始位置start是0还是1，这个要和0的key是-1还是0配合起来，想清楚
