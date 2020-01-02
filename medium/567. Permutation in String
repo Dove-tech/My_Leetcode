@@ -1,0 +1,46 @@
+question:
+Given two strings s1 and s2, write a function to return true if s2 contains the permutation of s1. In other words, one of the first string's permutations is the substring of the second string.
+
+ 
+
+Example 1:
+
+Input: s1 = "ab" s2 = "eidbaooo"
+Output: True
+Explanation: s2 contains one permutation of s1 ("ba").
+
+Example 2:
+
+Input:s1= "ab" s2 = "eidboaoo"
+Output: False
+
+solution:
+class Solution:
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+        target = [0 for i in range(26)]
+        current = [0 for i in range(26)]
+        l1 = len(s1)
+        l2 = len(s2)
+        for i in s1:
+            temp = ord(i)-ord("a") 
+            target[temp] += 1
+        
+        f = 0
+        s = 0
+        while f < l2:
+            temp = ord(s2[f])-ord("a")
+            current[temp] += 1
+            f += 1
+            if f - s > l1:
+                temp = ord(s2[s])-ord("a")
+                current[temp] -= 1
+                s += 1
+            if current == target:
+                return True
+
+本题采用BF会超时，因此我们采用hashmap和slide window，或者hashmap可以替换成拥有类似与hashmap的数组，例如本题的解法就是用的数组
+内置的意思就是，只要有一个slide window中字母的数量都一样就返回true
+这里我们先用一个数组确定s1字母数量，数组的下标相当于key，下标对应的val相当于hashmap中的val，
+这里我们是字母在字母表中的位置用于下标，其val是字母的个数
+注意slide window我们如果滑动，用一个f代表fast指针，一个s代表slow指针，两个指针的差大于s1的长度时，就把s的那个值从数组current中-1（也就是去掉）
+最后看在滑动过程中是否存在一个current和target是一样的即可
