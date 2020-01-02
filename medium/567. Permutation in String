@@ -44,3 +44,5 @@ class Solution:
 这里我们是字母在字母表中的位置用于下标，其val是字母的个数
 注意slide window我们如果滑动，用一个f代表fast指针，一个s代表slow指针，两个指针的差大于s1的长度时，就把s的那个值从数组current中-1（也就是去掉）
 最后看在滑动过程中是否存在一个current和target是一样的即可
+
+ord函数返回字符对应的ASC码，所以用ord(" ")-ord("a")即可得到字母的数字位置，从0开始
