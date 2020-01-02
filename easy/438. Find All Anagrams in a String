@@ -1,0 +1,56 @@
+question:
+Given a string s and a non-empty string p, find all the start indices of p's anagrams in s.
+
+Strings consists of lowercase English letters only and the length of both strings s and p will not be larger than 20,100.
+
+The order of output does not matter.
+
+Example 1:
+
+Input:
+s: "cbaebabacd" p: "abc"
+
+Output:
+[0, 6]
+
+Explanation:
+The substring with start index = 0 is "cba", which is an anagram of "abc".
+The substring with start index = 6 is "bac", which is an anagram of "abc".
+
+Example 2:
+
+Input:
+s: "abab" p: "ab"
+
+Output:
+[0, 1, 2]
+
+
+solution:
+class Solution:
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        target=[0 for i in range(26)]
+        current=[0 for i in range(26)]
+        l1=len(s)
+        l2=len(p)
+        ans=[]
+        
+        for i in p:
+            temp=ord(i)-ord("a")
+            target[temp]+=1
+        fast=0
+        slow=0
+        while fast<l1:
+            temp=ord(s[fast])-ord("a")
+            current[temp]+=1
+            fast+=1
+            if fast-slow>l2:
+                temp=ord(s[slow])-ord("a")
+                current[temp]+= -1
+                slow+=1
+            if current == target:
+                ans.append(slow)
+        return ans
+
+
+同样是用slide window加上hashtable来做，用数组来代替hashtable比较快，但是思想仍然是hashtable的思想
