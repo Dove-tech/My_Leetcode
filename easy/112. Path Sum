@@ -1,0 +1,35 @@
+question:
+Given a binary tree and a sum, determine if the tree has a root-to-leaf path such that adding up all the values along the path equals the given sum.
+
+Note: A leaf is a node with no children.
+
+Example:
+
+Given the below binary tree and sum = 22,
+
+      5
+     / \
+    4   8
+   /   / \
+  11  13  4
+ /  \      \
+7    2      1
+
+
+solution:
+    class Solution:
+
+
+        def hasPathSum(self, root, sum):
+            if not root:
+                return False
+
+            if not root.left and not root.right and root.val == sum:
+                return True
+
+            l = self.hasPathSum(root.left, sum-root.val)
+            r = self.hasPathSum(root.right, sum-root.val)
+
+            return l or r
+这里注意两点，一个是返回true和false的结果，这个return应该怎么写
+另一个是，sum-root.val这个能不能想到，因为你可以理解为是相对于我递归到的某一层，我希望这个形参sum应该是多少，正确答案就是sum-root.val
