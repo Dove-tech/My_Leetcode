@@ -1,0 +1,38 @@
+question:
+Given a binary tree, find its minimum depth.
+
+The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.
+
+Note: A leaf is a node with no children.
+
+Example:
+
+Given binary tree [3,9,20,null,null,15,7],
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+
+return its minimum depth = 2.
+
+solution:
+  class Solution:
+    def minDepth(self, root: TreeNode) -> int:
+        if not root:
+            return 0
+        if not root.left and not root.right:
+            return 1
+        l=self.minDepth(root.left) 
+        r=self.minDepth(root.right)
+        if not root.left: return r+1
+        if not root.right: return l+1
+        return min(l,r)+1
+        
+        
+注意两点，一个是一定别忘了判断第二层是不是全为空
+第二个是，这个题是要求从root到leaf的最短举例，所以如果树是[1,2]的话，结果应当是2而不是1，所以我们加上了        
+        if not root.left: return r+1
+        if not root.right: return l+1
+就是为了防止结果是1的这种情况
