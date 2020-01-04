@@ -1,0 +1,51 @@
+question：
+Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).
+
+For example, this binary tree [1,2,2,3,4,4,3] is symmetric:
+
+    1
+   / \
+  2   2
+ / \ / \
+3  4 4  3
+
+ 
+
+But the following [1,2,2,null,3,null,3] is not:
+
+    1
+   / \
+  2   2
+   \   \
+   3    3
+
+ 
+
+Note:
+Bonus points if you could solve it both recursively and iteratively.
+
+
+solution:
+class Solution:
+    def isSymmetric(self, root: TreeNode) -> bool:
+        if not root:
+            return True
+        if not root.left and not root.right:
+            return True
+        if not root.left or not root.right:
+            return False
+        return self.ismirror(root.left,root.right)
+    
+    def ismirror(self, p, q):
+            if not p and not q:
+                return True
+            if not p or not q:
+                return False
+            l = self.ismirror(p.left,q.right)
+            r = self.ismirror(p.right, q.left)
+            return  p.val == q.val and l and r
+            
+            
+    虽然看起来输入只有一个树，但是实际上这是一个考察双树的题目，因此我们需要建立两个函数，一个用于根节点，一个用于根节点衍生出的两个“树”。
+    注意这两个函数时平等的关系，不要一个包含另一个。
+    思考一下 return  p.val == q.val and l and r 是为什么这么写
