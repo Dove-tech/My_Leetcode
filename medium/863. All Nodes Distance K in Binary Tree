@@ -1,0 +1,63 @@
+We are given a binary tree (with root node root), a target node, and an integer value K.
+
+Return a list of the values of all nodes that have a distance K from the target node.  The answer can be returned in any order.
+
+ 
+
+Example 1:
+
+Input: root = [3,5,1,6,2,0,8,null,null,7,4], target = 5, K = 2
+
+Output: [7,4,1]
+
+Explanation: 
+The nodes that are a distance 2 from the target node (with value 5)
+have values 7, 4, and 1.
+
+solution:
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def distanceK(self, root: TreeNode, target: TreeNode, K: int) -> List[int]:
+        conn = collections.defaultdict(list)
+        def connect(parent, child):
+            if parent and child:
+                conn[parent.val].append(child.val)
+                conn[child.val].append(parent.val)
+            if child.left: connect(child, child.left)
+            if child.right: connect(child, child.right)
+        connect(None, root)
+        # A recursive dfs funciton connect help to build up a map conn.
+        res = [target.val]
+        seen = set(res)
+        for i in range(K):
+            res = [y for x in res for y in conn[x] if y not in seen]
+            seen = seen|set(res)
+        return res
+        
+        
+ 广度优先搜索BFS的第一个题目，值得好好琢磨，尤其是res = [y for x in res for y in conn[x] if y not in seen]这一句的使用比较神奇。
+ 注意，DFS只是一种思想，可以用这种思想去遍历你所有的数据，这个数据类型可以是树，也可以是图，也可以是别的其他东西。
+ 选择数据类型的时候，一定要具体情况具体分析，有的需要建立成树（或者理解为有向或者无向图），有的就不需要，可能只用数组就可以了。
+所以不要空套一种模板，连所用到的数据结构都一样，要学会灵活变通。
+
+以下为代码的部分注释，方便理解：
+
+connect(None, root)
+        # A recursive dfs funciton connect help to build up a map conn.
+        res = [target.val]#这里正常情况下应该是一个队列（不是栈，一定要先进先出）
+        seen = set(res)  #seen在这里是一个集合，因为此题所有的数据都是unique，所以不用建立一个字典，直接用一个不能存在重复值的集合就可以，否则就需要用字典
+        for i in range(K):
+            res = [y for x in res for y in conn[x] if y not in seen]
+#遍历最开始的res，然后遍历x的所有邻居，如果y不在seen中就加进res中
+            seen = seen|set(res)
+#随后把新的res加入到seen中，充实seen让后来遍历的数不会重复
+        return res
+#返回最后一次遍历（此时所有的数距离target都是k了）直接返回这个res
+
+
