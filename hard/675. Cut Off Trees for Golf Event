@@ -93,7 +93,7 @@ class Solution:
                 if x == tx and y == ty:
                     return step
                 for nx, ny in [(x,y+1),(x+1,y),(x-1,y),(x, y-1)]:
-                    if (nx,ny) in visited and nx<0 and nx>=m and ny<0 and ny>=n and forest[nx][ny]==0:  #m和n要一一对应，别对应反了，以及是>=m,n而不是>m,n，因为等于也不可以
+                    if (nx,ny) in visited or nx<0 or nx>=m or ny<0 or ny>=n or forest[nx][ny]==0:  #m和n要一一对应，别对应反了，以及是>=m,n而不是>m,n，因为等于也不可以
                         continue
                     q.append((nx,ny))
                     #visited |= set(q)
