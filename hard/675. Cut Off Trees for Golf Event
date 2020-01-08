@@ -1,0 +1,112 @@
+question:
+You are asked to cut off trees in a forest for a golf event. The forest is represented as a non-negative 2D map, in this map:
+
+    0 represents the obstacle can't be reached.
+    1 represents the ground can be walked through.
+    The place with number bigger than 1 represents a tree can be walked through, and this positive number represents the tree's height.
+
+ 
+
+You are asked to cut off all the trees in this forest in the order of tree's height - always cut off the tree with lowest height first. And after cutting, the original place has the tree will become a grass (value 1).
+
+You will start from the point (0, 0) and you should output the minimum steps you need to walk to cut off all the trees. If you can't cut off all the trees, output -1 in that situation.
+
+You are guaranteed that no two trees have the same height and there is at least one tree needs to be cut off.
+
+Example 1:
+
+Input: 
+[
+ [1,2,3],
+ [0,0,4],
+ [7,6,5]
+]
+Output: 6
+
+ 
+
+Example 2:
+
+Input: 
+[
+ [1,2,3],
+ [0,0,0],
+ [7,6,5]
+]
+Output: -1
+
+ 
+
+Example 3:
+
+Input: 
+[
+ [2,3,4],
+ [0,0,5],
+ [8,7,6]
+]
+Output: 6
+Explanation: You started from the point (0,0) and you can cut off the tree in (0,0) directly without walking.
+
+ 
+
+Hint: size of the given matrix will not exceed 50x50.
+
+
+
+solution:
+import collections
+class Solution:
+    def cutOffTree(self, forest: List[List[int]]) -> int:
+        m = len(forest)
+        n = len(forest[0])
+        trees = []
+        
+        for i in range(m):
+            for j in range(n):
+                if forest[i][j] > 0:
+                    trees.append((forest[i][j],i,j))#把高度放在第一个值是为了方便排序
+                    
+        trees = sorted(trees)#按照第一个值进行升序排列，这里的第一个值就是高度
+        count = 0
+        cx, cy = 0,0
+        for h,x,y in trees:
+            step = self.BFS(forest, cx, cy, x, y)
+            if step == -1:
+                return -1
+            count += step
+            cx, cy = x, y
+        return count
+    
+    def BFS(self,forest,cx,cy,tx,ty):
+        m = len(forest)
+        n = len(forest[0])
+        q = collections.deque()#从右边进入，popleft从左边排出
+        q.append((cx,cy))
+        #visited = set(q)， 除了用下面这个另一个有趣的方法来设置visited以外，也可以用我们之前学的set的方法，因为数据都是unique的
+        visited = [[False for j in range(n)] for i in range(m)]
+        step = 0 
+        while len(q) > 0:
+            size = len(q)
+            for i in range(size):
+                x,y = q.popleft()
+                if x == tx and y == ty:
+                    return step
+                for nx, ny in [(x,y+1),(x+1,y),(x-1,y),(x, y-1)]:
+                    if (nx,ny) in visited or nx<0 or nx>=m or ny<0 or ny>=n or forest[nx][ny]==0:  #m和n要一一对应，别对应反了，以及是>=m,n而不是>m,n，因为等于也不可以
+                        continue
+                    q.append((nx,ny))
+                    #visited |= set(q)
+                    visited[x][y] = True
+            step += 1
+        return -1
+  
+  
+  这是一道比较经典的用BFS遍历表格找到最短路径的题目。
+  因为要从最矮的树开始砍伐，所以我们的思路是，用一个列表存储所有的树的高度和对应的坐标，然后按照树的高度对所有的点进行升序排序。我们从（0,0）出发
+  按照升序的顺序遍历所有的点，找到每两个点的最短路径然后，把路径加起来就可以。
+  BFS可以用来计算从一个点到另一个点，也就是从startpoint到endpoint的最短路径，所以前面我们要设置好每一次调用BFS的时候，startpoint和endpoint是
+  多少
+  因为这个题用python会TLE，所以提交用的是JAVA，但是这个思路是没有问题的。
+  注意题目中的cx,cy,x,y,nx,ny,tx,ty都是在什么时候使用的
+  
