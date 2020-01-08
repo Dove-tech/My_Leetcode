@@ -1,0 +1,97 @@
+question:
+In a given 2D binary array A, there are two islands.  (An island is a 4-directionally connected group of 1s not connected to any other 1s.)
+
+Now, we may change 0s to 1s so as to connect the two islands together to form 1 island.
+
+Return the smallest number of 0s that must be flipped.  (It is guaranteed that the answer is at least 1.)
+
+ 
+
+Example 1:
+
+Input: [[0,1],[1,0]]
+Output: 1
+
+Example 2:
+
+Input: [[0,1,0],[0,0,0],[0,0,1]]
+Output: 2
+
+Example 3:
+
+Input: [[1,1,1,1,1],[1,0,0,0,1],[1,0,1,0,1],[1,0,0,0,1],[1,1,1,1,1]]
+Output: 1
+
+ 
+
+Note:
+
+    1 <= A.length = A[0].length <= 100
+    A[i][j] == 0 or A[i][j] == 1
+    
+    
+    
+    
+solution:
+class Solution:
+    def shortestBridge(self, grid: List[List[int]]) -> int:
+        rl, cl = len(grid), len(grid[0])
+        d = ((1,0),(0,1),(-1,0),(0,-1))
+        memo = [[0 for _ in range(cl)] for _ in range(rl)]
+        q = collections.deque()
+        
+        def dfs(x,y):
+            memo[x][y] = 1
+            q.append((0,x,y))
+            for i in d:
+                nx = x + i[0]
+                ny = y + i[1]
+                if 0 <= nx < rl and 0 <= ny < cl and grid[nx][ny] == 1 and memo[nx][ny] == 0:
+                    memo[nx][ny] = 1
+                    dfs(nx, ny)
+        
+        flag = 0
+        for i in range(rl):
+            for j in range(cl):
+                if grid[i][j] == 1:
+                    dfs(i,j)
+                    flag = 1
+                    break
+            if flag:
+                break
+
+        # step = 0
+        # while len(q)>0:
+        #     size = len(q)
+        #     for i in range(size):
+        #         t,x,y = q.popleft()
+        #         for j in d:
+        #             nx = x + j[0]
+        #             ny = y + j[1]
+        #             if nx<0 or nx>=rl or ny<0 or ny>=cl or memo[nx][ny] == 1:
+        #                 continue
+        #             if grid[nx][ny] == 1:
+        #                 return step
+        #             q.append((t,nx,ny))
+        #             memo[nx][ny] == 1
+        #     step += 1
+        # 自己写的这一段会超时
+        
+        while q:
+            t,x,y = q.popleft()
+            for i in d:
+                nx = x + i[0]
+                ny = y + i[1]
+                if 0 <= nx < rl and 0 <= ny < cl and memo[nx][ny] == 0:
+                    if grid[nx][ny] == 0:
+                        q.append((t + 1, nx, ny))
+                        memo[nx][ny] = 1
+                    else:
+                        return t  
+   这个题目就是多出发点，多目标点的问题，可以用DFS或者BFS来做，关键是确定一个出发点和一个目标点。
+   所以首先用DFS找到一个小岛，用DFS最方便（仔细思考便知）。然后我们把这个小岛push到queue里面去，用BFS去遍历，如果碰到了一个为1的格子，那么就返回step
+   要理解BFS的思想，BFS中的q一般情况下是一个值，但是如果一开始就是多个值，那么就可以实现多出发点求解最小路径的问题
+   DFS部分的代码由别人提供，因此此时还没有学习到DFS，BFS自己写但是超时
+   注意在判断新的点是否超过表格边界的时候是否要加=号，否则很容易出现越界的问题
+   这里用一个memo作为visited，看过的值赋1，方法与之前一开始是False，看过之后赋True的思想是一样的
+                
