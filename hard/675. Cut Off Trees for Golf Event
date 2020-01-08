@@ -108,5 +108,5 @@ class Solution:
   BFS可以用来计算从一个点到另一个点，也就是从startpoint到endpoint的最短路径，所以前面我们要设置好每一次调用BFS的时候，startpoint和endpoint是
   多少
   因为这个题用python会TLE，所以提交用的是JAVA，但是这个思路是没有问题的。
-  注意题目中的cx,cy,x,y,nx,ny,tx,ty都是在什么时候使用的
+  注意题目中的cx,cy,x,y,nx,ny,tx,ty都是在什么时候使用的，以及如何在表中上下左右移动
   
