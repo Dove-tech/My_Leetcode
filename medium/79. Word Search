@@ -1,0 +1,44 @@
+question:
+Given a 2D board and a word, find if the word exists in the grid.
+
+The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once.
+
+Example:
+
+board =
+[
+  ['A','B','C','E'],
+  ['S','F','C','S'],
+  ['A','D','E','E']
+]
+
+Given word = "ABCCED", return true.
+Given word = "SEE", return true.
+Given word = "ABCB", return false.
+
+
+solution:
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        self.word = word
+        row = len(board)
+        col = len(board[0])
+        for i in range(row):
+            for j in range(col):
+                if self.dfs(board,i,j,0,[]): #0代表步数，从第0步开始深度优先搜索
+                    return True
+        return False
+    
+    def dfs(self,board, row, col, i, visited):
+        if i == len(self.word):
+            return True 
+        if row >= 0 and col >= 0 and row < len(board) and col < len(board[0]) and board[row][col] == self.word[i] and (row, col) not in visited:
+            visited.append((row,col))
+            res = self.dfs(board,row+1,col,i+1,visited) or self.dfs(board,row-1,col,i+1,visited) or self.dfs(board,row,col+1,i+1,visited) or self.dfs(board,row,col-1,i+1,visited)
+            if not res:
+                visited.pop()
+            return res
+            
+  本题用DFS来做，DFS的思想就是递归的思想。
+  首先主函数中遍历所有的格点，每个格点进行DFS递归，满足要求就返回Ture，用一个visited记录，如果这个点不是我们要的点，就pop出来为下一个点的遍历做准备
+  注意这里递归的思想以及用一个res表示True和False
