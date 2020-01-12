@@ -1,0 +1,52 @@
+question:
+Given a 2d grid map of '1's (land) and '0's (water), count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+Example 1:
+
+Input:
+11110
+11010
+11000
+00000
+
+Output: 1
+
+Example 2:
+
+Input:
+11000
+11000
+00100
+00011
+
+Output: 3
+
+solution:
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+            
+        m = len(grid)
+        if m == 0: return 0
+        n = len(grid[0])
+        
+        ans = 0
+        for y in range(m):
+            for x in range(n):
+                if grid[y][x] == '1':
+                    ans += 1
+                    self.__dfs(grid, x, y, n, m)
+        return ans
+    
+    def __dfs(self, grid, x, y, n, m):
+        if x < 0 or y < 0 or x >=n or y >= m or grid[y][x] == '0':
+            return
+        grid[y][x] = '0'
+        self.__dfs(grid, x + 1, y, n, m)
+        self.__dfs(grid, x - 1, y, n, m)
+        self.__dfs(grid, x, y + 1, n, m)
+        self.__dfs(grid, x, y - 1, n, m) 
+        
+        
+  一个简单地搜索类的题目，但是用DFS更简单一些。
+  可以用力来练手的DFS的题目。
+  一个技巧是，把遍历过的点置为0，从而不会重复搜索
