@@ -1,0 +1,56 @@
+question:
+Given a set of candidate numbers (candidates) (without duplicates) and a target number (target), find all unique combinations in candidates where the candidate numbers sums to target.
+
+The same repeated number may be chosen from candidates unlimited number of times.
+
+Note:
+
+    All numbers (including target) will be positive integers.
+    The solution set must not contain duplicate combinations.
+
+Example 1:
+
+Input: candidates = [2,3,6,7], target = 7,
+A solution set is:
+[
+  [7],
+  [2,2,3]
+]
+
+Example 2:
+
+Input: candidates = [2,3,5], target = 8,
+A solution set is:
+[
+  [2,2,2,2],
+  [2,3,3],
+  [3,5]
+]
+
+
+
+solution:
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        def dfs(candidates, target, s, current, ans):
+            if target == 0:
+                ans.append(current[:])
+                return
+        
+            for i in range(s, len(candidates)):       
+                if candidates[i]>target:
+                    return
+                current.append(candidates[i])
+                dfs(candidates, target - candidates[i], i, current, ans)
+                current.pop()  #这里的这句话应用在递归里会发现它会被使用好多次，实现我把最近添加进来的那个数字去掉的作用，从而我可以添加下一个数字了，进而实现从当前s到最后的一次遍历过程（注意这是一个循环函数）
+        ans = []   
+        candidates.sort()
+        dfs(candidates, target, 0, [], ans)
+        
+        return ans
+        
+  这是用DFS实现组合的题目，排列组合相应的模板在word文件中有，但是这个题比较特别的是元素可以重复，所以DFS中的i原本应该是i+1，这里是i，表示我可以选择i这个
+  值（以往你只能从i+1开始选）
+  递归的思想在这里还需要认真理解一下，是如何在主函数中只使用了一次dfs就可以遍历所有的情况的
+  求和类题目，可以考虑用target-candidates 这样的方式进行递归，要有这个思想
+  
