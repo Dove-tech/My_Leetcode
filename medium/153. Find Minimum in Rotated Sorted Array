@@ -1,0 +1,36 @@
+question:
+Suppose an array sorted in ascending order is rotated at some pivot unknown to you beforehand.
+
+(i.e.,  [0,1,2,4,5,6,7] might become  [4,5,6,7,0,1,2]).
+
+Find the minimum element.
+
+You may assume no duplicate exists in the array.
+
+Example 1:
+
+Input: [3,4,5,1,2] 
+Output: 1
+
+Example 2:
+
+Input: [4,5,6,7,0,1,2]
+Output: 0
+
+
+solution:
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        def Min(nums,l,r):
+            if l+1>=r:
+                return min(nums[l],nums[r])
+            if nums[l]<nums[r]:
+                return nums[l]
+            mid = l + (r-l)//2
+            return min(Min(nums,l,mid-1),Min(nums,mid,r))
+        
+        return Min(nums,0,len(nums)-1)
+        
+ 采用递归+分治的方法，一分为二后，若只有两个值就返回他们的最小值，若是sorted，就返回第一个值（也就是最小值），若不是上述两种情况，则继续一分为二。
+ 最后返回所有被划分的区域的最小值中的最小值
+
