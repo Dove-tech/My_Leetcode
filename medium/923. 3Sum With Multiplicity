@@ -1,0 +1,65 @@
+
+question:
+Given an integer array A, and an integer target, return the number of tuples i, j, k  such that i < j < k and A[i] + A[j] + A[k] == target.
+
+As the answer can be very large, return it modulo 10^9 + 7.
+
+ 
+
+Example 1:
+
+Input: A = [1,1,2,2,3,3,4,4,5,5], target = 8
+Output: 20
+Explanation: 
+Enumerating by the values (A[i], A[j], A[k]):
+(1, 2, 5) occurs 8 times;
+(1, 3, 4) occurs 8 times;
+(2, 2, 4) occurs 2 times;
+(2, 3, 3) occurs 2 times.
+
+Example 2:
+
+Input: A = [1,1,2,2,2,2], target = 5
+Output: 12
+Explanation: 
+A[i] = 1, A[j] = A[k] = 2 occurs 12 times:
+We choose one 1 from [1,1] in 2 ways,
+and two 2s from [2,2,2,2] in 6 ways.
+
+
+solution:
+class Solution:
+    def threeSumMulti(self, A: List[int], target: int) -> int:
+        count = collections.Counter()
+        res = 0
+        if not A:
+            return 0 
+        for i in A:
+            count[i] += 1
+        for m in range(target+1):
+            for n in range(m, target+1):
+                k = target - m - n
+                if (k < 0 or k > target): continue
+                if k == m and m == n:
+                    res += count[m]*(count[m]-2)*(count[m]-1)//6  
+                elif k != m and m == n:
+                    res += count[k]*(count[m])*(count[m]-1)//2
+                elif k > n:
+                    res += (count[m])*(count[n])*(count[k])
+        return int(res % (10**9 + 7))
+这个题采用组合的方法来解决，首先用一个哈希表记录所有出现的数字的次数，然后 
+Loop i on all numbers,
+loop j on all numbers,
+check if k = target - i - j is valid.
+
+Add the number of this combination to result.
+3 cases covers all possible combination:
+
+    i == j == k
+    i == j != k
+    i < k && j < k
+针对这三种不同的情况，用组合数的方法，也即，如果i == j == k，就C（count（i），3），从count（i）中选择3个进行组合（思考一下便知）
+同理另外两个情况也是如此。
+最后res加上所有的排列组合的数字就是最后的答案。
+有一个细节，因为最后的结果涉及到阶乘，数字很大，所以我们一般用该结果与10**9+7的余数作为最后结果
+ 
