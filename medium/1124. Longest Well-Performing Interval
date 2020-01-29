@@ -1,0 +1,52 @@
+question:
+We are given hours, a list of the number of hours worked per day for a given employee.
+
+A day is considered to be a tiring day if and only if the number of hours worked is (strictly) greater than 8.
+
+A well-performing interval is an interval of days for which the number of tiring days is strictly larger than the number of non-tiring days.
+
+Return the length of the longest well-performing interval.
+
+ 
+
+Example 1:
+
+Input: hours = [9,9,6,0,6,6,9]
+Output: 3
+Explanation: The longest well-performing interval is [9,9,6].
+
+ 
+
+Constraints:
+
+    1 <= hours.length <= 10000
+    0 <= hours[i] <= 16
+
+
+
+solution:
+class Solution:
+    def longestWPI(self, hours: List[int]) -> int:
+        dic = collections.defaultdict()
+        sum = 0
+        ans = 0
+        for i in range(len(hours)):
+            if hours[i] > 8:
+                sum += 1
+            else:
+                sum += -1
+            if sum > 0:
+                ans = i+1 # 每次出现1，那么此时的i+1就是一个ans
+            else:
+                if sum not in dic:
+                    dic[sum]=i
+            if sum-1 in dic:
+                ans = max(ans, i-dic[sum-1])
+        return ans
+        
+  这个题目关键的思想是转化的思想，我们可以用1代替9，-1代替6，然后计算prefix sum，从中，一方面是找最终和为1的区间，另一方面找i-dic[sum-1]的区间
+  ，也即从i（其有一个sum）到另一个index（其sum为sum-1），从而这一段也是一个合适的996.
+  所以我们首先用字典的方法，获得首次出现不同sum的i的位置。
+  随后分类讨论，一个是看和为1的区间，也即相当于从0出发的区间
+  另一个是看i-dic[sum-1]的区间，也即并不是从0出发，而是从i出发的区间
+  最后取两个中的最大值即可
