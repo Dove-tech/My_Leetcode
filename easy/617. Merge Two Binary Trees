@@ -1,0 +1,57 @@
+question:
+Given two binary trees and imagine that when you put one of them to cover the other, some nodes of the two trees are overlapped while the others are not.
+
+You need to merge them into a new binary tree. The merge rule is that if two nodes overlap, then sum node values up as the new value of the merged node. Otherwise, the NOT null node will be used as the node of new tree.
+
+Example 1:
+
+Input: 
+	Tree 1                     Tree 2                  
+          1                         2                             
+         / \                       / \                            
+        3   2                     1   3                        
+       /                           \   \                      
+      5                             4   7                  
+Output: 
+Merged tree:
+	     3
+	    / \
+	   4   5
+	  / \   \ 
+	 5   4   7
+
+ 
+
+Note: The merging process must start from the root nodes of both trees.
+
+
+solution:
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def mergeTrees(self, t1: TreeNode, t2: TreeNode) -> TreeNode:
+        if not t1 or not t2:
+            return t1 if t1 else t2 
+        else:
+            t1.val = t1.val + t2.val
+            t1.right = self.mergeTrees(t1.right, t2.right)
+            t1.left = self.mergeTrees(t1.left, t2.left)   
+ #不能直接self.。。。。而是要t1.right = self.。。。。 ,  否则返回值没有地方放！    
+            return t1
+            
+            
+            
+  这个题可以采用递归的方法（树的题目经常采用递归的方法）
+  在双方都不为空的情况下，让其val相加，然后递归其左子树和右子树即可。
+  要注意这样写
+            t1.right = self.mergeTrees(t1.right, t2.right)
+            t1.left = self.mergeTrees(t1.left, t2.left) 
+  而不是这样写
+  self.mergeTrees(t1.right, t2.right)
+  self.mergeTrees(t1.left, t2.left) 
+  否则就像注释中说的那样，return t1 if t1 else t2 返回的值会无处安放，从而导致输出不出来
