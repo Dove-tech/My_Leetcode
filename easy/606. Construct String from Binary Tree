@@ -1,0 +1,65 @@
+question:
+You need to construct a string consists of parenthesis and integers from a binary tree with the preorder traversing way.
+
+The null node needs to be represented by empty parenthesis pair "()". And you need to omit all the empty parenthesis pairs that don't affect the one-to-one mapping relationship between the string and the original binary tree.
+
+Example 1:
+
+Input: Binary tree: [1,2,3,4]
+       1
+     /   \
+    2     3
+   /    
+  4     
+
+Output: "1(2(4))(3)"
+
+Explanation: Originallay it needs to be "1(2(4)())(3()())", 
+but you need to omit all the unnecessary empty parenthesis pairs. 
+And it will be "1(2(4))(3)".
+
+Example 2:
+
+Input: Binary tree: [1,2,3,null,4]
+       1
+     /   \
+    2     3
+     \  
+      4 
+
+Output: "1(2()(4))(3)"
+
+Explanation: Almost the same as the first example, 
+except we can't omit the first parenthesis pair to break the one-to-one mapping relationship between the input and the output.
+
+
+solution:
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def tree2str(self, t: TreeNode) -> str:
+        if not t:
+            return ""
+        s = str(t.val)
+        l = str(self.tree2str(t.left))
+        r = str(self.tree2str(t.right))
+        
+        if not t.right and not t.left:
+            return  s 
+        if not t.right and t.left:
+            return s + "(" + l + ")"
+        else:
+            return s + "(" + l + ")" + "(" + r + ")"
+         
+         
+这个题采用常见的树的递归的方式来做。
+要注意这个题在添加括号的时候，一共有三种不同的情况，一个是左右子树都为空，结点只是一个叶子，此时不添加子树的括号；
+一个是左子树不是空，右子树是空，此时只添加左子树的括号，不添加右子树的括号
+最后一个是最通用的情况，包括左右子树都不为空或者左子树为空右子树不为空，此时子树的两个括号都要添加
+
+所以代码中进行了分类讨论（注意字符串和int之间的转化）
