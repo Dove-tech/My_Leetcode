@@ -1,0 +1,52 @@
+question:
+ Implement a MapSum class with insert, and sum methods.
+
+For the method insert, you'll be given a pair of (string, integer). The string represents the key and the integer represents the value. If the key already existed, then the original key-value pair will be overridden to the new one.
+
+For the method sum, you'll be given a string representing the prefix, and you need to return the sum of all the pairs' value whose key starts with the prefix.
+
+Example 1:
+
+Input: insert("apple", 3), Output: Null
+Input: sum("ap"), Output: 3
+Input: insert("app", 2), Output: Null
+Input: sum("ap"), Output: 5
+
+
+solution:
+class MapSum:
+
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.val_ = collections.Counter()   #加上self后面才能用
+        self.sum_ = collections.Counter()
+
+    def insert(self, key: str, val: int) -> None:
+        inc = val
+        if key in self.val_:
+            inc = inc - self.val_[key]
+        self.val_[key] = val
+        for i in range(len(key)+1):  #要注意是len+1而不是len
+            self.sum_[key[0:i]] += inc
+        
+
+    def sum(self, prefix: str) -> int:
+        return self.sum_[prefix]
+        
+
+
+# Your MapSum object will be instantiated and called as such:
+# obj = MapSum()
+# obj.insert(key,val)
+# param_2 = obj.sum(prefix)
+
+
+本题只让你输出sum，但是这个sum的输出和insert密切相关，同时也涉及到prefix的问题，因此该题目是在insert中直接建立一个用于计算prefix的sum的字典
+从而到时候你想要什么prefix的sum都可以在这个名叫sum_的字典中找就可以了。
+我们用每一次insert之后的差值不断地更新sum，单纯的insert其实很简单，但是重要的就是更新sum_
+例如我们insert app，那么理所应当的，a，ap，app的值都要发生改变，所以我们采用用差值不断更新sum_的方法
+如果已经存在key，就计算一下差值并更新到sum_中，如果不存在key，就直接把key的value更新到sum_中去
+
+注意一个小细节，key[0:i]是从第一个字母到第i-1个字母，所以在遍历的时候，必须是len(key)+1，否则会出现少一个字母的情况
