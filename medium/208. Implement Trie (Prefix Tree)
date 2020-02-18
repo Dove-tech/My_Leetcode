@@ -19,7 +19,7 @@ Note:
 
 
 
-solution:
+solution_1:
 class Trie(object):
 
 	def __init__(self):
@@ -56,4 +56,35 @@ class Trie(object):
 # param_3 = obj.startsWith(prefix)
 
 
-本题采用了python作为动态语言独有的方法，字典嵌套字典。word中的每一个字c其对应的value都是一个字典，最后添加一个"-"其value是True，用来进行search
+方法1采用了python作为动态语言独有的方法：字典嵌套字典。word中的每一个字c其对应的value都是一个字典，最后添加一个"-"其value是True，用来进行search
+
+
+solution_2:
+    def __init__(self):
+        self.trie = ""
+        self.dic = {}
+    
+    def insert(self, word):
+        t = self.trie
+        d = self.dic
+        for i in word:
+            t = t + i
+            if t not in d:
+                d[t] = True
+        d[t+'_'] = True
+                
+    def search(self, word):
+        t = self.trie
+        d = self.dic
+        if word in d and (word+'_') in d:
+            return True
+        
+    def startsWith(self, prefix):
+        t = self.trie
+        d = self.dic
+        if prefix in d:
+            return True
+采用前缀树的方法，每加入一个新单词，就遍历其前缀并加入字典中，这样search和startswith就很方便查找，直接在字典中查找就行。
+为了区分search和startswith，在完整的单词后面加入一个'_'，表明这个是完整的单词
+字符串的拼接直接用+即可
+注意，list不能作为hashtable的key
