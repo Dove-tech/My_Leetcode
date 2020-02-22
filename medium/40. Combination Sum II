@@ -40,11 +40,13 @@ class Solution:
             
             for i in range(s, len(candidates)):
                 if candidates[i] > target:
-                    return
+                    return  （return会退出整个循环，continue会退出当前循环的这一层，进入循环的下一层）
                 
              
                 if (i>s and candidates[i] == candidates[i-1]):
-                    continue
+                    continue    # 意思是如果这两个数字相同，我就不把第二个当成我cur中的第一个了（或者是同一层递归中的那一个），因为
+                    会和之前的重复。（理解为不让cur中的第一个数据重复会更容易理解这句话）
+                    
                 current.append(candidates[i])
                 dfs(candidates, target - candidates[i], i+1, current, ans)
                 current.pop()
