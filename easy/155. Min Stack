@@ -85,3 +85,46 @@ pop或者top的时候：
     如果栈顶元素大于0，说明它对最小值没有影响，上一个最小值就是上上个最小值。
 
 一定要注意是先计算差值push进去，然后再判断是否更新最小值
+
+
+
+
+另更新常规方法：
+每次入栈判断是否是最小值。（用另外一个min_stack来保存所有存在的最小值）
+class MinStack:
+
+    def __init__(self):
+        """
+        initialize your data structure here.
+        """
+        self.min_stack = [float('inf')]
+        self.stack = []
+        
+    def push(self, x: int) -> None:
+        self.stack.append(x)
+        if x <= self.min_stack[-1]:
+            self.min_stack.append(x)
+
+    def pop(self) -> None:
+        if not self.stack:
+            return 
+        tmp = self.stack.pop()
+        if tmp == self.min_stack[-1]:
+            self.min_stack.pop()
+
+    def top(self) -> int:
+        if not self.stack:
+            return
+        tmp = self.stack[-1]
+        return tmp
+
+    def getMin(self) -> int:
+        return self.min_stack[-1]
+
+
+# Your MinStack object will be instantiated and called as such:
+# obj = MinStack()
+# obj.push(x)
+# obj.pop()
+# param_3 = obj.top()
+# param_4 = obj.getMin()
