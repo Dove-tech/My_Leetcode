@@ -1,0 +1,48 @@
+question:
+Given a sorted linked list, delete all nodes that have duplicate numbers, leaving only distinct numbers from the original list.
+
+Return the linked list sorted as well.
+
+Example 1:
+
+Input: 1->2->3->3->4->4->5
+Output: 1->2->5
+
+Example 2:
+
+Input: 1->1->1->2->3
+Output: 2->3
+
+
+solution:
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def deleteDuplicates(self, head: ListNode) -> ListNode:
+        dummy = ListNode(0)
+        dummy.next = head
+        cur = head
+        pre = dummy
+        
+        while cur:
+            if cur.next and cur.val == cur.next.val:
+                while cur and cur.next and cur.val == cur.next.val:
+                    cur = cur.next
+                pre.next = cur.next
+                
+            else:
+                pre = pre.next
+                
+            cur = cur.next
+        return dummy.next
+        
+        # 核心思想：只要找到前后两个相等的node，我就开始循环，想办法找到此时所有的节相等节点，
+        # 然后让前面的指针pre指向第一个不相同的点
+        # 但是此时依然不能向后推进指针，而是要判断指向的这个点后面是不是也出现了和它相等的情况
+        # 除非是不相等（也就是说，一共经历了两次是否相等的比对），我们才把pre向后推移继续步骤
+         
+ 
