@@ -1,0 +1,54 @@
+question：
+Given a singly linked list L: L0→L1→…→Ln-1→Ln,
+reorder it to: L0→Ln→L1→Ln-1→L2→Ln-2→…
+
+You may not modify the values in the list's nodes, only nodes itself may be changed.
+
+Example 1:
+
+Given 1->2->3->4, reorder it to 1->4->2->3.
+
+Example 2:
+
+Given 1->2->3->4->5, reorder it to 1->5->2->4->3.
+
+
+
+solutio：
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def reorderList(self, head: ListNode) -> None:
+        """
+        Do not return anything, modify head in-place instead.
+        """
+
+        if not head:
+            return
+
+        # find the mid point
+        slow = fast = head 
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+
+        # reverse the second half in-place
+        pre, node = None, slow
+        while node:
+            pre, node.next, node = node, pre, node.next
+
+        # Merge in-place; Note : the last node of "first" and "second" are the same
+        first, second = head, pre
+        while second.next:
+            first.next, first = second, first.next
+            second.next, second = first, second.next
+        return 
+        
+ 过程比较巧妙，实现对折效果需要做的是：将链表一分为二，第二部分反转然后一二部分拼接
+ 链表的反转还不大熟练，可以多复习一下
+ 拼接的时候所用的写法比较简洁明了，也不会出现环，可以学一下
+ 
